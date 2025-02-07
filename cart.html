@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .cart-container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        .cart-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .remove-item {
+            color: red;
+            cursor: pointer;
+        }
+        .checkout-button {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function loadCart() {
+            const cartContainer = document.getElementById('cart-items');
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+                return;
+            }
+
+            cartContainer.innerHTML = "";
+            cart.forEach((item, index) => {
+                cartContainer.innerHTML += `
+                    <div class="cart-item">
+                        <p><strong>Sleeve:</strong> ${item.sleeve}</p>
+                        <p><strong>Size:</strong> ${item.size}</p>
+                        <p><strong>Color:</strong> ${item.color}</p>
+                        <p><strong>Quantity:</strong> ${item.quantity}</p>
+                        <p><strong>Price:</strong> ${item.price}</p>
+                        <span class="remove-item" onclick="removeFromCart(${index})">Remove</span>
+                    </div>
+                `;
+            });
+        }
+
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        function clearCart() {
+            localStorage.removeItem('cart');
+            loadCart();
+        }
+
+        window.onload = loadCart;
+    </script>
+</head>
+<body>
+
+<div class="cart-container">
+    <h1>Your Cart</h1>
+    <div id="cart-items"></div>
+    <a href="#" class="checkout-button">Proceed to Checkout</a>
+    <button onclick="clearCart()" class="checkout-button" style="background-color: red;">Clear Cart</button>
+</div>
+
+</body>
+</html>
